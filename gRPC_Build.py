@@ -17,6 +17,31 @@ def delete_folder(folder_path: str, print_info = False) -> None:
             Commons.print_message(__file__, f'Cleaning done.')
 
 
+def copy_folder_recursively(source: str, destination: str) -> None:
+    """
+    Copies a folder recursively, with all the sub-folders and files in it.
+    Found here: https://stackoverflow.com/a/1994840/6060256
+    """
+    import errno
+    import shutil
+
+    try:
+        shutil.copytree(source, destination)
+    except OSError as exception:
+        if exception.errno == errno.ENOTDIR:
+            shutil.copy(source, destination)
+        else:
+            raise
+
+
+def create_and_copy(source: str, destination: str) -> None:
+    """
+    Creates the destination folder if doesn't exist, or clean it first if already present.
+    """
+    delete_folder(destination, print_info = True)
+    copy_folder_recursively(source, destination)
+
+
 if __name__ == "__main__":
 
     import time
@@ -60,15 +85,22 @@ if __name__ == "__main__":
             Commons.print_message(__file__, 'Launching the build.')
             os.chdir(build_folder)
 
+            toolset_option: str = ''
             if toolset:
-                os.system(f'cmake "{ Commons.REPOSITORY_DIRECTORY }" -G "{ generator }" -T { toolset } -DCMAKE_BUILD_TYPE={ build_configuration } -DgRPC_BUILD_TESTS=OFF -DgRPC_INSTALL=FALSE')
-            else:
-                os.system(f'cmake "{ Commons.REPOSITORY_DIRECTORY }" -G "{ generator }" -DCMAKE_BUILD_TYPE={ build_configuration } -DgRPC_BUILD_TESTS=OFF -DgRPC_INSTALL=FALSE')
+                toolset_option = f'-T { toolset }'
 
+            os.system(f'cmake "{ Commons.REPOSITORY_DIRECTORY }" -G "{ generator }" { toolset_option } -DCMAKE_BUILD_TYPE={ build_configuration } -DgRPC_BUILD_TESTS=OFF -DgRPC_INSTALL=FALSE')
             os.system(f'cmake --build . --config { build_configuration }')
-            Commons.print_success(__file__, 'Build finished successfully.')
+
+            Commons.print_success(__file__, f'{ build_configuration } build finished successfully.')
+
+            # Copying include folder.
+            Commons.print_message(__file__, 'Copying #include folders.')
+            create_and_copy(os.path.join(Commons.REPOSITORY_DIRECTORY, 'include'), os.path.join(Commons.OUTPUT_DIRECTORY, 'include\google'))
 
 
+    except OSError as exception:
+        Commons.print_failure(__file__, f'Got an I/O error: { exception }.')
     except Exception as exception:
         Commons.print_failure(__file__, f'An error occurred: { exception }.')
 
