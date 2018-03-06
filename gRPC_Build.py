@@ -106,11 +106,6 @@ if __name__ == "__main__":
             create_and_copy(os.path.join(protobuf_directory, r'stubs'), os.path.join(output_protobuf_directory, r'stubs'))
             create_and_copy(os.path.join(protobuf_directory, r'io'), os.path.join(output_protobuf_directory, r'io'))
 
-            # Special case for Release because we don't want to add useless .cc files.
-            #for file in os.listdir(protobuf_directory):
-            #    if file.endswith('.h') or (file.endswith('.cc') and build_configuration == 'Release'):
-            #        shutil.copy2(os.path.join(protobuf_directory, file), output_protobuf_directory)
-
             Commons.print_success(__file__, 'All #include folders successfully copied.')
 
             # Copying binaries.
