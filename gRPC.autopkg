@@ -1,7 +1,7 @@
 nuget {
 	nuspec {
 		id = gRPC.Cpp.NuGet;
-		version : 0.0.1;
+		version : 1.9.0;
 		title: gRPC C++ Native NuGet;
 		authors: { Google Inc. };
 		owners: { informaticienzero };
@@ -11,7 +11,7 @@ nuget {
 		requireLicenseAcceptance: false;
 		summary: "A gRPC native NuGet package for C++ applications.";
 		description: "This NuGet package allows you to use gRPC in C++ applications with no pain. Just install it and you're good to go.";
-		releaseNotes: "Master release.";
+		releaseNotes: "Version 1.9.0 release.";
 		copyright: "Copyright 2018";
 		tags: { cpp, grpc, native, google };
 	};
