@@ -24,19 +24,19 @@ def print_message(file_name: str, message: str) -> None:
     """
     Prints a normal message with the associated file name.
     """
-    print(f'[{ get_file_name(file_name) }] { message }')
+    print(f'[{ get_file_name(file_name) }] { message }', flush = True)
 
 
 def print_success(file_name: str, message: str) -> None:
     """
     Prints a success message in green, with the associated file name
     """
-    print(f'[{ get_file_name(file_name) }]{ colorama.Fore.GREEN } { message }')
+    print(f'[{ get_file_name(file_name) }]{ colorama.Fore.GREEN } { message }', flush = True)
 
 
 def print_failure(file_name: str, message: str) -> None:
     """
     Prints a failure message in red, with the associated file name
     """
-    print(f'[{ get_file_name(file_name) }]{ colorama.Fore.RED } { message }', file = sys.stderr)
+    print(f'[{ get_file_name(file_name) }]{ colorama.Fore.RED } { message }', file = sys.stderr, flush = True)
 

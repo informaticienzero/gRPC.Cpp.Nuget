@@ -102,7 +102,7 @@ if __name__ == "__main__":
             protobuf_directory: str = os.path.join(Commons.REPOSITORY_DIRECTORY, r'third_party\protobuf\src\google\protobuf')
             output_protobuf_directory: str = os.path.join(Commons.OUTPUT_DIRECTORY, r'include\google\protobuf')
 
-            create_and_copy(os.path.join(Commons.REPOSITORY_DIRECTORY, r'include'), os.path.join(Commons.OUTPUT_DIRECTORY, r'include\google'))
+            create_and_copy(os.path.join(Commons.REPOSITORY_DIRECTORY, r'include'), os.path.join(Commons.OUTPUT_DIRECTORY, r'include'))
             create_and_copy(os.path.join(protobuf_directory, r'stubs'), os.path.join(output_protobuf_directory, r'stubs'))
             create_and_copy(os.path.join(protobuf_directory, r'io'), os.path.join(output_protobuf_directory, r'io'))
 
@@ -146,11 +146,12 @@ if __name__ == "__main__":
             shutil.copy2(os.path.join(build_folder, r'third_party\boringssl\ssl\{}\ssl.lib'.format(build_configuration)), output_libraries_directory)
             shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\gpr.lib'), output_libraries_directory)
             shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc.lib'), output_libraries_directory)
-            shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc_unsecure.lib'), output_libraries_directory)
             shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc++.lib'), output_libraries_directory)
             shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc++_error_details.lib'), output_libraries_directory)
             shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc++_reflection.lib'), output_libraries_directory)
-            shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc++_unsecure.lib'), output_libraries_directory)
+            # TEMP: to investigate in order to know what is the problem with those two.
+            #shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc_unsecure.lib'), output_libraries_directory)
+            #shutil.copy2(os.path.join(build_folder, f'{ build_configuration }\grpc++_unsecure.lib'), output_libraries_directory)
 
             Commons.print_success(__file__, 'Static libraries successfully copied.')
 

@@ -12,14 +12,20 @@ nuget {
 		summary: "A gRPC native NuGet package for C++ applications.";
 		description: "This NuGet package allows you to use gRPC in C++ applications with no pain. Just install it and you'll good to go.";
 		releaseNotes: "First release.";
+		copyright: "Copyright 2018";
 		tags: { cpp, grpc, native, google };
 	};
 	
 	files {
-		include: { ".\include\**\*" };
-		[x86,debug] {
+		include: {
+			".\include\**\*"
+		};
+		[Win32,debug] {
 			lib: ".\lib\Debug\**\*";
-			bin: ".\bin\Debug\google\**\*";
+		}
+
+		[x64,debug] {
+			lib: ".\lib\Debug\**\*";
 		}
 	};
 }

@@ -1,3 +1,4 @@
+import colorama
 import Commons
 import os
 import shutil
@@ -7,6 +8,9 @@ import time
 
 
 if __name__ == '__main__':
+
+    # To get colors in Windows cmd.
+    colorama.init(autoreset = True)
 
     start: float = time.time()
     Commons.print_message(__file__, 'Launching the NuGet generation script.')
