@@ -18,6 +18,7 @@ I can't certify it. Feel free to open issues and submit pull requests to improve
 * **[cmake](https://cmake.org/download/)** (required by gRPC).
 * **[go](https://golang.org/dl/)** (required by gRPC).
 * **[perl](https://www.activestate.com/activeperl/)** (required by gRPC).
+* **[Write-NuGetPackage](http://coapp.org/reference/write-nugetpackage.html)** (Powershell) to generate the native NuGet.
 
 ### Configure the project ###
 
@@ -37,4 +38,7 @@ python .\gRPC_Download.py
 
 # Compiles gRPC with the parameters given in Configuration.ini.
 python .\gRPC_Build.py
+
+# Build the NuGet package.
+python .\gRPC_NuGet_Generation.py
 ```
