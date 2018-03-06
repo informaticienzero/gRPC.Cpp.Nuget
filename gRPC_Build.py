@@ -72,7 +72,7 @@ if __name__ == "__main__":
         os.mkdir(os.path.join(Commons.OUTPUT_DIRECTORY, r'include\google\protobuf'))
 
         # Building gRPC.
-        for build_configuration in ['Debug']:
+        for build_configuration in ['Debug', 'Release']:
 
             Commons.print_message(__file__, f'Building gRPC in { colorama.Fore.YELLOW }{ build_configuration }{ colorama.Style.RESET_ALL }.')
             Commons.print_message(__file__, f'Generator is: { colorama.Fore.YELLOW }{ generator }{ colorama.Style.RESET_ALL }.')
@@ -106,10 +106,10 @@ if __name__ == "__main__":
             create_and_copy(os.path.join(protobuf_directory, r'stubs'), os.path.join(output_protobuf_directory, r'stubs'))
             create_and_copy(os.path.join(protobuf_directory, r'io'), os.path.join(output_protobuf_directory, r'io'))
 
-            # Now we need to copy all files at root of the protobuf directory.
-            for file in os.listdir(protobuf_directory):
-                if file.endswith('.h') or file.endswith('.cc'):
-                    shutil.copy2(os.path.join(protobuf_directory, file), output_protobuf_directory)
+            # Special case for Release because we don't want to add useless .cc files.
+            #for file in os.listdir(protobuf_directory):
+            #    if file.endswith('.h') or (file.endswith('.cc') and build_configuration == 'Release'):
+            #        shutil.copy2(os.path.join(protobuf_directory, file), output_protobuf_directory)
 
             Commons.print_success(__file__, 'All #include folders successfully copied.')
 

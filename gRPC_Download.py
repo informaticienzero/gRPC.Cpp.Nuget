@@ -1,18 +1,7 @@
 import Commons
 import Exceptions
-import git
 import shutil
-
-
-class GitCloneProgress(git.RemoteProgress):
-    """
-    Used to show in real-time progress of the git clone.
-    """
-    def line_dropped(self, line: str):
-        print(line)
-
-    def update(self, *args):
-        print(self._cur_line)
+import sys
 
 
 def check_dependencies() -> None:
@@ -53,8 +42,6 @@ if __name__ == '__main__':
             Commons.print_message(__file__, 'Cleaning the git repository directory first.')
             os.system(f'rmdir /S /q "{ Commons.REPOSITORY_DIRECTORY }"')
             Commons.print_message(__file__, 'Cleaning done.')
-            os.rmdir(Commons.REPOSITORY_DIRECTORY)
-
 
         from configparser import ConfigParser
         configuration: ConfigParser = ConfigParser()
@@ -62,15 +49,28 @@ if __name__ == '__main__':
 
         # The repository to clone can be changed in the settings, to allow building other versions that the last master.
         repository_url: str = configuration['gRPC Repository']['Url']
+        version_tag: str = configuration['gRPC Tag'].get('Tag')
+
+        import subprocess
 
         # Cloning the repository from GitHub.
-        Commons.print_message(__file__, f'Cloning git repository from { colorama.Fore.MAGENTA }{ repository_url }{ colorama.Style.RESET_ALL }.')
-        repository: git.Repo = git.Repo.clone_from(repository_url, Commons.REPOSITORY_DIRECTORY, progress = GitCloneProgress())
+        tag_message: str = ''
+        if version_tag:
+            tag_message = f' with tag { colorama.Fore.MAGENTA }{ version_tag }{ colorama.Style.RESET_ALL }'
+
+        Commons.print_message(__file__, f'Cloning git repository from { colorama.Fore.MAGENTA }{ repository_url }{ colorama.Style.RESET_ALL }{ tag_message }.')
+        clone_process: subprocess.Popen = None
+        if version_tag:
+            clone_process = subprocess.Popen(['git', 'clone', '--recursive', '--branch', version_tag, repository_url, '--depth', '1', Commons.REPOSITORY_DIRECTORY], stdout = sys.stdout, stderr = sys.stderr)
+        else:
+            clone_process = subprocess.Popen(['git', 'clone', repository_url, Commons.REPOSITORY_DIRECTORY], stdout = sys.stdout, stderr = sys.stderr)
+        clone_process.communicate()
         Commons.print_message(__file__, f'gRPC successfully cloned into { colorama.Fore.CYAN }{ Commons.REPOSITORY_DIRECTORY }{ colorama.Style.RESET_ALL }.')
 
-        # git update submodules --init
+        # Gets the source code of gRPC dependencies.
         Commons.print_message(__file__, 'Updating the submodules.')
-        print(repository.git.submodule('update', '--init'))
+        update_process: subprocess.Popen = subprocess.Popen(['git', 'submodule', 'update', '--init'], stdout = sys.stdout, stderr = sys.stderr)
+        update_process.communicate()
         Commons.print_success(__file__, 'Submodules updated successfully.')
 
     except Exceptions.MissingDependency as exception:
